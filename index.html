@@ -180,7 +180,8 @@ function pickTime(el,t){
   setTimeout(function(){
     addMsg('Perfecto '+state.name+'. He registrado tu solicitud:\n\n• Nombre: '+state.name+' '+state.apellidos+'\n• Teléfono: '+state.tel+'\n• Curso: '+state.service+'\n• Fecha: '+state.date+'\n• Hora: '+state.time+'\n\nEnviando datos al centro...');
     setTimeout(function(){
-      var datos={nombre:state.name,apellidos:state.apellidos,telefono:state.tel,servicio:state.service,fecha:state.date,hora:state.time};
+      var clean=function(s){return s.replace(/[^\x20-\x7E\xA0-\xFF]/g,'').trim()};
+      var datos={nombre:clean(state.name),apellidos:clean(state.apellidos),telefono:clean(state.tel),servicio:clean(state.service),fecha:clean(state.date),hora:clean(state.time)};
       if(WEBHOOK_URL){var ifr=document.createElement('iframe');ifr.style.display='none';ifr.src=WEBHOOK_URL+'?nombre='+encodeURIComponent(datos.nombre)+'&apellidos='+encodeURIComponent(datos.apellidos)+'&telefono='+encodeURIComponent(datos.telefono)+'&servicio='+encodeURIComponent(datos.servicio)+'&fecha='+encodeURIComponent(datos.fecha)+'&hora='+encodeURIComponent(datos.hora);document.body.appendChild(ifr);setTimeout(function(){ifr.remove()},5000)}
       if(WA_NUMBER){var waMsg='📚 *NUEVA SOLICITUD — Chatbot IA*\n\n👤 *Nombre:* '+state.name+' '+state.apellidos+'\n📱 *Teléfono:* '+state.tel+'\n📚 *Curso:* '+state.service+'\n📅 *Fecha:* '+state.date+'\n🕐 *Hora:* '+state.time+'\n\n_Enviado desde Chatbot IA WhiteMoon_';var waUrl='https://api.whatsapp.com/send?phone='+WA_NUMBER+'&text='+encodeURIComponent(waMsg);window.open(waUrl,'_blank')}
       addHtml('<div class="wa-confirm"><div class="wa-icon">✅</div><div class="wa-title">¡Solicitud registrada!</div><div class="wa-text">Hemos enviado tus datos al centro de formación.<br><br>Revisarán la disponibilidad y si el día y hora seleccionados no estuvieran disponibles, te llamarán para proponerte la fecha y hora más cercana posible.<br><br>¡Gracias por tu interés! 😊</div></div>');
